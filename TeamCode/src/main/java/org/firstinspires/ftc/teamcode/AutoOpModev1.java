@@ -78,6 +78,7 @@ public class AutoOpModev1 extends LinearOpMode {
     int InsideLoopDown = 0;
     double speed;
     double math = Math.random() * ( 1 - 0 );
+    boolean bLedOn = true;
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
@@ -96,6 +97,8 @@ public class AutoOpModev1 extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         forkliftDrive = hardwareMap.get(DcMotor.class, "forklift_drive");
         color_sensor = hardwareMap.get(ColorSensor.class, "color_sensor");
+
+        color_sensor.enableLed(bLedOn);
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
@@ -123,77 +126,74 @@ public class AutoOpModev1 extends LinearOpMode {
         rightDrive.setPower(0.0);
         */
 
-
+        //lol, YOU THOUGHT
+        //NO!(in a spanish accent)
+        //FINE
+        //UGH! You make me not want to
+        //K
+        //move claw close
+        clawServo1.setDirection(Servo.Direction.REVERSE);
+        clawServo1.setPosition(0.43);
+        clawServo2.setDirection(Servo.Direction.FORWARD);
+        clawServo2.setPosition(0.35);
+        //Move forklift up
+        forkliftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        forkliftDrive.setPower(-0.4);
+        sleep(100);
+        forkliftDrive.setPower(0.0);
         //Move tail down
         tailServo.setDirection(Servo.Direction.FORWARD);
         tailServo.setPosition(0.75);
-        wait(400);
+        sleep(2000);
 
+
+        //wait(400);
+        //US BLUE!!!NOT YOU! HAHAHAHA
         // COLOR SENSOR PART
         //IF COLOR SENSOR EQUALS BLAH COLOR THEN MOVE THAT WAY
 
-        if(color_sensor.alpha() > 4){
-            eTime.reset();
-            while (eTime.time() < 0.25) {
+        try {
+            sleep(2000);
+            if (color_sensor.red() < color_sensor.blue()) {
+
+                eTime.reset();
+                while (eTime.time() < 0.25) {
                 leftDrive.setPower(-0.35);
-                rightDrive.setPower(0.35);
-            }
-            leftDrive.setPower(0.0);
-            rightDrive.setPower(0.0);
-        } else  {
-            //turn right THIS IS A PLACEHOLDER
-            eTime.reset();
-            while (eTime.time() < 0.25) {
-                leftDrive.setPower(0.35);
-                rightDrive.setPower(-0.35);
+                    rightDrive.setPower(0.35);
+                }
+                leftDrive.setPower(0.0);
+                rightDrive.setPower(0.0);
+            } else {
+                //turn right THIS IS A PLACEHOLDER
+                eTime.reset();
+                while (eTime.time() < 0.25) {
+                    leftDrive.setPower(0.35);
+                    rightDrive.setPower(-0.35);
+                }
+
+                leftDrive.setPower(0.0);
+                rightDrive.setPower(0.0);
             }
 
-            leftDrive.setPower(0.0);
-            rightDrive.setPower(0.0);
+        } catch (Exception e) {
+            telemetry.addData("Exception #1 ", " " );
+            telemetry.update();
         }
         //move tail back up
-        tailServo.setDirection(Servo.Direction.REVERSE);
+        tailServo.setDirection(Servo.Direction.FORWARD);
         tailServo.setPosition(0.25);
-        wait(400);
+        sleep(600);
+        //wait(400);
 
-        //Turn back to straight position
-        eTime.reset();
-        while(eTime.time() <  0.25) {
-            leftDrive.setPower(-0.35);
-            rightDrive.setPower(0.35);
-        }
-        //THIS is a comment
-
-
-
-
-        //move forward off the balance
-        eTime.reset();
-        while(eTime.time() <  2) {
-            leftDrive.setPower(0.35);
-            rightDrive.setPower(0.35);
-        }
-
-
-        //Turn once off the ramp
-        eTime.reset();
-        while(eTime.time() <  0.65) {
-            leftDrive.setPower(-0.25);
-            rightDrive.setPower(0.25);
-        }
-
-        //move forward into the safezone
-        eTime.reset();
-        while(eTime.time() <  2) {
-            leftDrive.setPower(0.35);
-            rightDrive.setPower(0.35);
-        }
-
-
-            telemetry.addData("Math #:", " " + math);
-            telemetry.addData("Loop #:", " " + loop);
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
+        telemetry.addData("Math #:", " " + math);
+        telemetry.addData("Loop #:", " " + loop);
+        //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.update();
+        telemetry.addData("Argb", color_sensor.argb());
+        telemetry.addData("Red  ", color_sensor.red());
+        telemetry.addData("Green", color_sensor.green());
+        telemetry.addData("Blue ", color_sensor.blue());
+        telemetry.update(); sleep(5000);
         }
     }
 

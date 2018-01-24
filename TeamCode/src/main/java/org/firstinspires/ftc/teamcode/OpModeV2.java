@@ -195,7 +195,7 @@ public class OpModeV2 extends LinearOpMode {
             if(gamepad1.dpad_up)
             {
                 forkliftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-                forkliftDrive.setPower(-0.2);
+                forkliftDrive.setPower(-0.4);
                 //wait(40);
                 forkliftDrive.setPower(0.0);
 
